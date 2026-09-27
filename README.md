@@ -1,56 +1,172 @@
-# Welcome to your Expo app 👋
+# Grupp 5 – React Native / Expo testprojekt
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Tallinna Ülikooli aine **Mobiilirakenduste arendamine** kodune grupitöö **S13**.
 
-## Get started
+Eesmärk oli luua React Native / Expo projekt, muuta algset malli ning kontrollida rakenduse töötamist simulaatoris, füüsilises seadmes ja debuggeriga.
 
-1. Install dependencies
+## Autorid
 
-   ```bash
-   npm install
-   ```
+- Marcus Puust
+- Jan Aaron Einloo
+- Rico Paum
+- Rene Pruul
+- Karl Luberg
+- Armin Jaemaa
 
-2. Start the app
+## Tehnoloogiad
 
-   ```bash
-   npx expo start
-   ```
+- Expo SDK 57
+- React Native 0.86.3
+- TypeScript 6.0.3
+- Expo Router
+- React
+- Node.js / npm
+- Git / GitHub
 
-In the output, you'll find options to open the app in a
+Testitud: **macOS, Xcode 27.0, iOS 27.0 Simulator, Expo Go ja füüsiline iPhone**.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+> Androidi ja Windowsi käivitamisjuhised on lisatud, kuid neid keskkondi selle töö käigus ei testitud.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+---
 
-## Get a fresh project
+## Seadistamine
 
-When you're ready, run:
+Vajalikud on **Node.js, npm ja Git**.
 
 ```bash
-npm run reset-project
+git clone https://github.com/MarcusPuust/Grupp5TestApp.git
+cd Grupp5TestApp
+npm install
+npx expo start --lan
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Soovi korral saab projekti kontrollida:
 
-### Other setup steps
+```bash
+npx expo-doctor
+```
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+Meie projekt läbis Expo Doctori kontrollid edukalt.
 
-## Learn more
+### iOS – macOS
 
-To learn more about developing your project with Expo, look at the following resources:
+iOS Simulatori jaoks on vajalik Xcode ja iOS Simulator runtime.
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+Pärast Expo käivitamist vajuta terminalis:
 
-## Join the community
+```text
+i
+```
 
-Join our community of developers creating universal apps.
+Füüsilise iPhone'i puhul paigalda **Expo Go**, ühenda telefon ja arvuti samasse võrku ning skaneeri terminalis olev QR-kood.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+### Android – macOS / Windows
+
+Android Emulatori jaoks paigalda **Android Studio, Android SDK ja Android Virtual Device (AVD)**.
+
+Pärast emulaatori käivitamist vajuta Expo terminalis:
+
+```text
+a
+```
+
+Füüsilise Androidi puhul paigalda **Expo Go** ja skaneeri terminalis olev QR-kood.
+
+> iOS Simulator töötab ainult macOS-is.
+
+---
+
+## Muudatus algses mallis
+
+Muutsime faili:
+
+```text
+src/app/index.tsx
+```
+
+Algse avalehe asemele tegime **Grupp 5 Counter App** rakenduse, millel on loendur ning nupud `Lisa +1` ja `Nulli`.
+
+Loenduri suurendamiseks lisasime enda funktsiooni:
+
+```tsx
+const handleIncrement = () => {
+  const newCount = count + 1;
+  setCount(newCount);
+};
+```
+
+Muudatus on rakenduses nähtav ning algne mall ja meie muudatus on Git-ajaloos eraldi commit'ides.
+
+---
+
+## Testimine
+
+### iOS Simulator
+
+Rakendust testiti **iOS 27.0 Simulatoris**. Kontrollisime rakenduse käivitumist ning mõlema nupu töötamist.
+
+![Rakendus iOS Simulatoris](docs/ios-simulator.png)
+
+### Füüsiline iPhone
+
+Sama projekt käivitati **Expo Go** abil füüsilisel iPhone'il. Kontrollisime rakenduse käivitumist ja loenduri töötamist.
+
+![Rakendus füüsilisel iPhone'il](docs/physical-iphone.png)
+
+### Debugger ja breakpoint
+
+React Native DevToolsis lisasime breakpoint'i enda `handleIncrement` funktsiooni reale:
+
+```tsx
+const newCount = count + 1;
+```
+
+Füüsilises iPhone'is `Lisa +1` vajutamisel peatus rakendus breakpoint'is ja telefonis kuvati `Paused in debugger`.
+
+![Breakpoint React Native DevToolsis](docs/debugger-devtools.png)
+
+![Paused in debugger füüsilisel iPhone'il](docs/debugger-iphone.png)
+
+---
+
+## Probleemid ja lahendused
+
+### Expo ja React Native versioonid
+
+Algselt soovisime kasutada React Native 0.87, kuid Expo versioonidega tekkisid ühilduvusprobleemid. Lõplikult kasutasime **Expo SDK 57, React Native 0.86.3 ja TypeScript 6.0.3**.
+
+### Metro Bundleri ühendus
+
+Simulatoris avanes Expo Go, kuid Metro serveriga ei saadud ühendust.
+
+`--localhost` režiimis kuulas Metro ainult:
+
+```text
+[::1]:8081
+```
+
+Lahenduseks oli Expo käivitamine LAN-režiimis:
+
+```bash
+npx expo start --lan --clear
+```
+
+Pärast seda kuulas Metro `*:8081` ning Simulator sai projektiga ühenduse.
+
+### Füüsiline iPhone ja debugger
+
+Expo Go kasutamiseks logisime telefonis sisse sama Expo kontoga. Seejärel avanes projekt QR-koodiga.
+
+React Native DevToolsis lisatud breakpoint peatas füüsilises telefonis töötava rakenduse edukalt.
+
+---
+
+## Refleksioon
+
+React Native'i ja TypeScripti koodi muutmine oli lihtne ning Expo Fast Refresh tegi muudatuste kontrollimise kiireks.
+
+Kõige keerulisem oli Simulatori ja Metro Bundleri ühenduse seadistamine. Probleemi lahendamiseks kontrollisime eraldi Metro serverit, porti 8081 ja Simulatori võrguühendust. Lahenduseks osutus `--lan` režiimi kasutamine.
+
+Töö käigus saime praktilise kogemuse Expo, React Native'i, iOS Simulatori, füüsilise iPhone'i ja debuggeriga. Samuti nägime, et rakenduse töötamist tuleb kontrollida eraldi nii virtuaalses kui ka füüsilises seadmes.
+
+---
