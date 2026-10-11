@@ -5,20 +5,20 @@ import {
   Switch,
   Text,
   View,
-} from "react-native";
+} from "react-native"
 
-import { useThemeContext, type ThemePreference } from "@/context/theme-context";
-import { useTheme } from "@/hooks/use-theme";
+import { useThemeContext, type ThemePreference } from "@/context/theme-context"
+import { useTheme } from "@/hooks/use-theme"
 
 export default function SettingsScreen() {
   const { themePreference, setThemePreference, colorScheme, isDark } =
-    useThemeContext();
-  const colors = useTheme();
+    useThemeContext()
+  const colors = useTheme()
 
   const options: {
-    id: ThemePreference;
-    label: string;
-    sublabel: string;
+    id: ThemePreference
+    label: string
+    sublabel: string
   }[] = [
     {
       id: "system",
@@ -35,11 +35,11 @@ export default function SettingsScreen() {
       label: "Tume režiim",
       sublabel: "Säästab akut ja on mugav pimedas",
     },
-  ];
+  ]
 
   const handleToggleSwitch = (value: boolean) => {
-    setThemePreference(value ? "dark" : "light");
-  };
+    setThemePreference(value ? "dark" : "light")
+  }
 
   return (
     <ScrollView
@@ -70,7 +70,7 @@ export default function SettingsScreen() {
 
         <View style={styles.optionsList}>
           {options.map((option) => {
-            const isSelected = themePreference === option.id;
+            const isSelected = themePreference === option.id
 
             return (
               <Pressable
@@ -124,7 +124,7 @@ export default function SettingsScreen() {
                   {isSelected && <View style={styles.radioInnerCircle} />}
                 </View>
               </Pressable>
-            );
+            )
           })}
         </View>
 
@@ -214,7 +214,7 @@ export default function SettingsScreen() {
         </View>
       </View>
     </ScrollView>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -326,4 +326,4 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "600",
   },
-});
+})

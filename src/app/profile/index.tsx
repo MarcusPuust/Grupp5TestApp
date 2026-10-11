@@ -21,7 +21,9 @@ export default function Profile() {
         <Text style={styles.avatarText}>👤</Text>
       </View>
 
-      <Text style={[styles.title, { color: colors.text }]}>Kasutaja Profiil</Text>
+      <Text style={[styles.title, { color: colors.text }]}>
+        Kasutaja Profiil
+      </Text>
       <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
         Grupp 5 testkasutaja
       </Text>

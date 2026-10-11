@@ -8,7 +8,9 @@ export default function HomeScreen() {
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={styles.content}>
-        <Text style={[styles.title, { color: colors.text }]}>Tere tulemast!</Text>
+        <Text style={[styles.title, { color: colors.text }]}>
+          Tere tulemast!
+        </Text>
 
         <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
           Tutvu meie mobiilirakenduse ja projektiga.

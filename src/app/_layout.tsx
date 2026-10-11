@@ -46,10 +46,7 @@ function RootLayoutContent() {
         }}
       />
 
-      <SideMenu
-        visible={menuOpen}
-        onClose={() => setMenuOpen(false)}
-      />
+      <SideMenu visible={menuOpen} onClose={() => setMenuOpen(false)} />
     </ThemeProvider>
   )
 }

@@ -1,21 +1,21 @@
-import { useRouter, type Href } from "expo-router";
-import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
+import { useRouter, type Href } from "expo-router"
+import { Modal, Pressable, StyleSheet, Text, View } from "react-native"
 
-import { useTheme } from "@/hooks/use-theme";
+import { useTheme } from "@/hooks/use-theme"
 
 type SideMenuProps = {
-  visible: boolean;
-  onClose: () => void;
-};
+  visible: boolean
+  onClose: () => void
+}
 
 export default function SideMenu({ visible, onClose }: SideMenuProps) {
-  const router = useRouter();
-  const colors = useTheme();
+  const router = useRouter()
+  const colors = useTheme()
 
   const navigateTo = (path: Href) => {
-    onClose();
-    router.replace(path);
-  };
+    onClose()
+    router.replace(path)
+  }
 
   return (
     <Modal
@@ -91,7 +91,7 @@ export default function SideMenu({ visible, onClose }: SideMenuProps) {
         />
       </View>
     </Modal>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
@@ -137,4 +137,4 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: "600",
   },
-});
+})

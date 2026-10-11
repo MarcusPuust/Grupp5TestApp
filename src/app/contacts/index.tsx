@@ -63,10 +63,7 @@ export default function ContactsScreen() {
           },
         ]}
       >
-        <Pressable
-          style={styles.contactRow}
-          onPress={handleEmail}
-        >
+        <Pressable style={styles.contactRow} onPress={handleEmail}>
           <Text style={styles.icon}>✉️</Text>
           <View style={styles.contactInfo}>
             <Text style={[styles.label, { color: colors.text }]}>E-post</Text>
@@ -79,10 +76,7 @@ export default function ContactsScreen() {
 
         <View style={[styles.divider, { backgroundColor: colors.border }]} />
 
-        <Pressable
-          style={styles.contactRow}
-          onPress={handlePhone}
-        >
+        <Pressable style={styles.contactRow} onPress={handlePhone}>
           <Text style={styles.icon}>📞</Text>
           <View style={styles.contactInfo}>
             <Text style={[styles.label, { color: colors.text }]}>Telefon</Text>

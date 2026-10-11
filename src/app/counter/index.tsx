@@ -36,7 +36,10 @@ export default function CounterScreen() {
       </Pressable>
 
       <Pressable
-        style={[styles.resetButton, { backgroundColor: colors.buttonSecondary }]}
+        style={[
+          styles.resetButton,
+          { backgroundColor: colors.buttonSecondary },
+        ]}
         onPress={handleReset}
       >
         <Text style={[styles.buttonText, { color: colors.primaryText }]}>
