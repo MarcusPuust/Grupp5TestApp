@@ -1,14 +1,18 @@
 import {
-    Alert,
-    Linking,
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
+  Alert,
+  Linking,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native"
 
+import { useTheme } from "@/hooks/use-theme"
+
 export default function ContactsScreen() {
+  const colors = useTheme()
+
   const email = "kontakt@example.com"
   const phone = "+372 5555 0000"
   const address = "Narva mnt 25, 10120 Tallinn, Eesti"
@@ -40,71 +44,99 @@ export default function ContactsScreen() {
 
   return (
     <ScrollView
-      style={styles.container}
+      style={[styles.container, { backgroundColor: colors.background }]}
       contentContainerStyle={styles.content}
     >
-      <Text style={styles.title}>Võta ühendust</Text>
+      <Text style={[styles.title, { color: colors.text }]}>Võta ühendust</Text>
 
-      <Text style={styles.subtitle}>
+      <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
         Küsimuste korral kirjuta või külasta meid.
       </Text>
 
       {/* Kontaktandmete kaart */}
-      <View style={styles.card}>
+      <View
+        style={[
+          styles.card,
+          {
+            backgroundColor: colors.card,
+            borderColor: colors.border,
+          },
+        ]}
+      >
         <Pressable
           style={styles.contactRow}
           onPress={handleEmail}
         >
-          <Text style={styles.icon}></Text>
+          <Text style={styles.icon}>✉️</Text>
           <View style={styles.contactInfo}>
-            <Text style={styles.label}>E-post</Text>
-            <Text style={styles.value}>{email}</Text>
+            <Text style={[styles.label, { color: colors.text }]}>E-post</Text>
+            <Text style={[styles.value, { color: colors.textSecondary }]}>
+              {email}
+            </Text>
           </View>
-          <Text style={styles.arrow}>›</Text>
+          <Text style={[styles.arrow, { color: colors.textMuted }]}>›</Text>
         </Pressable>
 
-        <View style={styles.divider} />
+        <View style={[styles.divider, { backgroundColor: colors.border }]} />
 
         <Pressable
           style={styles.contactRow}
           onPress={handlePhone}
         >
-          <Text style={styles.icon}></Text>
+          <Text style={styles.icon}>📞</Text>
           <View style={styles.contactInfo}>
-            <Text style={styles.label}>Telefon</Text>
-            <Text style={styles.value}>{phone}</Text>
+            <Text style={[styles.label, { color: colors.text }]}>Telefon</Text>
+            <Text style={[styles.value, { color: colors.textSecondary }]}>
+              {phone}
+            </Text>
           </View>
-          <Text style={styles.arrow}>›</Text>
+          <Text style={[styles.arrow, { color: colors.textMuted }]}>›</Text>
         </Pressable>
 
-        <View style={styles.divider} />
+        <View style={[styles.divider, { backgroundColor: colors.border }]} />
 
         <View style={styles.contactRow}>
-          <Text style={styles.icon}></Text>
+          <Text style={styles.icon}>📍</Text>
           <View style={styles.contactInfo}>
-            <Text style={styles.label}>Kontor</Text>
-            <Text style={styles.value}>{address}</Text>
+            <Text style={[styles.label, { color: colors.text }]}>Kontor</Text>
+            <Text style={[styles.value, { color: colors.textSecondary }]}>
+              {address}
+            </Text>
           </View>
         </View>
       </View>
 
       {/* Asukoha kaart */}
-      <View style={styles.card}>
-        <Text style={styles.sectionTitle}>Meie asukoht</Text>
+      <View
+        style={[
+          styles.card,
+          {
+            backgroundColor: colors.card,
+            borderColor: colors.border,
+          },
+        ]}
+      >
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>
+          Meie asukoht
+        </Text>
 
-        <Text style={styles.description}>
+        <Text style={[styles.description, { color: colors.textSecondary }]}>
           Vaata näidiskontori asukohta kaardirakenduses.
         </Text>
 
         <Pressable
-          style={styles.mapButton}
+          style={[styles.mapButton, { backgroundColor: colors.primary }]}
           onPress={handleMap}
         >
-          <Text style={styles.mapButtonText}> Ava kaardil</Text>
+          <Text style={[styles.mapButtonText, { color: colors.primaryText }]}>
+            Ava kaardil
+          </Text>
         </Pressable>
       </View>
 
-      <Text style={styles.footer}>Esialgsed näidisandmed</Text>
+      <Text style={[styles.footer, { color: colors.textMuted }]}>
+        Esialgsed näidisandmed
+      </Text>
     </ScrollView>
   )
 }
@@ -112,7 +144,6 @@ export default function ContactsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F5F7FC",
   },
   content: {
     padding: 24,
@@ -122,20 +153,18 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 30,
     fontWeight: "bold",
-    color: "#111827",
     marginBottom: 10,
   },
   subtitle: {
     fontSize: 15,
-    color: "#6B7280",
     lineHeight: 22,
     marginBottom: 30,
   },
   card: {
-    backgroundColor: "#FFFFFF",
     borderRadius: 16,
     padding: 20,
     marginBottom: 20,
+    borderWidth: 1,
   },
   contactRow: {
     flexDirection: "row",
@@ -143,7 +172,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   icon: {
-    fontSize: 24,
+    fontSize: 22,
     marginRight: 16,
   },
   contactInfo: {
@@ -152,48 +181,39 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     fontWeight: "600",
-    color: "#111827",
     marginBottom: 5,
   },
   value: {
     fontSize: 14,
-    color: "#6B7280",
   },
   arrow: {
     fontSize: 26,
-    color: "#9CA3AF",
   },
   divider: {
     height: 1,
-    backgroundColor: "#E5E7EB",
   },
   sectionTitle: {
     fontSize: 20,
     fontWeight: "600",
-    color: "#111827",
     marginBottom: 12,
   },
   description: {
     fontSize: 14,
-    color: "#6B7280",
     lineHeight: 22,
     marginBottom: 20,
   },
   mapButton: {
-    backgroundColor: "#2563EB",
     padding: 16,
     borderRadius: 10,
     alignItems: "center",
   },
   mapButtonText: {
-    color: "#FFFFFF",
     fontSize: 16,
     fontWeight: "600",
   },
   footer: {
     textAlign: "center",
     fontSize: 12,
-    color: "#9CA3AF",
     marginTop: 5,
   },
 })

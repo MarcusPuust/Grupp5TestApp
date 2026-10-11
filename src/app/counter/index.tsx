@@ -1,12 +1,14 @@
 import { useState } from "react"
 import { Pressable, StyleSheet, Text, View } from "react-native"
 
-export default function HomeScreen() {
+import { useTheme } from "@/hooks/use-theme"
+
+export default function CounterScreen() {
   const [count, setCount] = useState(0)
+  const colors = useTheme()
 
   const handleIncrement = () => {
-    const newCount = count + 1
-    setCount(newCount)
+    setCount((prev) => prev + 1)
   }
 
   const handleReset = () => {
@@ -14,27 +16,37 @@ export default function HomeScreen() {
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Grupp 5 Counter App</Text>
-      <Text style={styles.subtitle}>Mobiilirakenduste arendamine</Text>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <Text style={[styles.title, { color: colors.text }]}>
+        Grupp 5 Counter App
+      </Text>
+      <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
+        Mobiilirakenduste arendamine
+      </Text>
 
-      <Text style={styles.counter}>{count}</Text>
+      <Text style={[styles.counter, { color: colors.text }]}>{count}</Text>
 
       <Pressable
-        style={styles.button}
+        style={[styles.button, { backgroundColor: colors.primary }]}
         onPress={handleIncrement}
       >
-        <Text style={styles.buttonText}>Lisa +1</Text>
+        <Text style={[styles.buttonText, { color: colors.primaryText }]}>
+          Lisa +1
+        </Text>
       </Pressable>
 
       <Pressable
-        style={styles.resetButton}
+        style={[styles.resetButton, { backgroundColor: colors.buttonSecondary }]}
         onPress={handleReset}
       >
-        <Text style={styles.buttonText}>Nulli</Text>
+        <Text style={[styles.buttonText, { color: colors.primaryText }]}>
+          Nulli
+        </Text>
       </Pressable>
 
-      <Text style={styles.info}>React Native + TypeScript + Expo</Text>
+      <Text style={[styles.info, { color: colors.textMuted }]}>
+        React Native + TypeScript + Expo
+      </Text>
     </View>
   )
 }
@@ -45,7 +57,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 24,
-    backgroundColor: "#f5f7fb",
   },
   title: {
     fontSize: 28,
@@ -62,20 +73,17 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   button: {
-    backgroundColor: "#2563eb",
     paddingVertical: 14,
     paddingHorizontal: 40,
     borderRadius: 10,
     marginBottom: 12,
   },
   resetButton: {
-    backgroundColor: "#64748b",
     paddingVertical: 14,
     paddingHorizontal: 40,
     borderRadius: 10,
   },
   buttonText: {
-    color: "white",
     fontSize: 18,
     fontWeight: "600",
   },

@@ -1,18 +1,21 @@
-import { useRouter, type Href } from "expo-router"
-import { Modal, Pressable, StyleSheet, Text, View } from "react-native"
+import { useRouter, type Href } from "expo-router";
+import { Modal, Pressable, StyleSheet, Text, View } from "react-native";
+
+import { useTheme } from "@/hooks/use-theme";
 
 type SideMenuProps = {
-  visible: boolean
-  onClose: () => void
-}
+  visible: boolean;
+  onClose: () => void;
+};
 
 export default function SideMenu({ visible, onClose }: SideMenuProps) {
-  const router = useRouter()
+  const router = useRouter();
+  const colors = useTheme();
 
   const navigateTo = (path: Href) => {
-    onClose()
-    router.replace(path)
-  }
+    onClose();
+    router.replace(path);
+  };
 
   return (
     <Modal
@@ -22,56 +25,73 @@ export default function SideMenu({ visible, onClose }: SideMenuProps) {
       onRequestClose={onClose}
     >
       <View style={styles.overlay}>
-        <View style={styles.menu}>
-          <Text style={styles.title}>Grupp 5</Text>
-          <Text style={styles.subtitle}>Navigatsioon</Text>
+        <View style={[styles.menu, { backgroundColor: colors.card }]}>
+          <Text style={[styles.title, { color: colors.text }]}>Grupp 5</Text>
+          <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
+            Navigatsioon
+          </Text>
 
-          <Pressable
-            style={styles.menuItem}
-            onPress={() => navigateTo("/")}
-          >
-            <Text style={styles.menuText}>Avaleht</Text>
+          <Pressable style={styles.menuItem} onPress={() => navigateTo("/")}>
+            <Text style={[styles.menuText, { color: colors.text }]}>
+              Avaleht
+            </Text>
           </Pressable>
 
           <Pressable
             style={styles.menuItem}
             onPress={() => navigateTo("/contacts")}
           >
-            <Text style={styles.menuText}>Kontaktid</Text>
+            <Text style={[styles.menuText, { color: colors.text }]}>
+              Kontaktid
+            </Text>
           </Pressable>
 
           <Pressable
             style={styles.menuItem}
             onPress={() => navigateTo("/profile")}
           >
-            <Text style={styles.menuText}>Profiil</Text>
+            <Text style={[styles.menuText, { color: colors.text }]}>
+              Profiil
+            </Text>
+          </Pressable>
+
+          <Pressable
+            style={styles.menuItem}
+            onPress={() => navigateTo("/settings")}
+          >
+            <Text style={[styles.menuText, { color: colors.text }]}>
+              Seaded
+            </Text>
           </Pressable>
 
           <Pressable
             style={styles.menuItem}
             onPress={() => navigateTo("/counter")}
           >
-            <Text style={styles.menuText}>Eelmine loendur</Text>
+            <Text style={[styles.menuText, { color: colors.text }]}>
+              Eelmine loendur
+            </Text>
           </Pressable>
 
-          <View style={styles.separator} />
+          <View
+            style={[styles.separator, { backgroundColor: colors.border }]}
+          />
 
-          <Pressable
-            style={styles.closeButton}
-            onPress={onClose}
-          >
-            <Text style={styles.closeText}>Sulge menüü</Text>
+          <Pressable style={styles.closeButton} onPress={onClose}>
+            <Text style={[styles.closeText, { color: colors.primary }]}>
+              Sulge menüü
+            </Text>
           </Pressable>
         </View>
 
         <Pressable
-          style={styles.backdrop}
+          style={[styles.backdrop, { backgroundColor: colors.modalBackdrop }]}
           onPress={onClose}
           accessibilityLabel="Sulge menüü"
         />
       </View>
     </Modal>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -82,23 +102,19 @@ const styles = StyleSheet.create({
   menu: {
     width: "78%",
     maxWidth: 320,
-    backgroundColor: "#FFFFFF",
     paddingHorizontal: 24,
     paddingTop: 40,
     paddingBottom: 24,
   },
   backdrop: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.45)",
   },
   title: {
     fontSize: 26,
     fontWeight: "bold",
-    color: "#111827",
   },
   subtitle: {
     fontSize: 14,
-    color: "#6B7280",
     marginTop: 6,
     marginBottom: 30,
   },
@@ -109,11 +125,9 @@ const styles = StyleSheet.create({
   },
   menuText: {
     fontSize: 17,
-    color: "#111827",
   },
   separator: {
     height: 1,
-    backgroundColor: "#E5E7EB",
     marginVertical: 20,
   },
   closeButton: {
@@ -121,7 +135,6 @@ const styles = StyleSheet.create({
   },
   closeText: {
     fontSize: 15,
-    color: "#2563EB",
     fontWeight: "600",
   },
-})
+});
