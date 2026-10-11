@@ -39,6 +39,15 @@ export default function SideMenu({ visible, onClose }: SideMenuProps) {
 
           <Pressable
             style={styles.menuItem}
+            onPress={() => navigateTo("/profile/notifications")}
+          >
+            <Text style={[styles.menuText, { color: colors.text }]}>
+              Teavitused
+            </Text>
+          </Pressable>
+
+          <Pressable
+            style={styles.menuItem}
             onPress={() => navigateTo("/contacts")}
           >
             <Text style={[styles.menuText, { color: colors.text }]}>
