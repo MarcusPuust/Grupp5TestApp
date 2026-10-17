@@ -91,6 +91,15 @@ export default function SideMenu({ visible, onClose }: SideMenuProps) {
             </Text>
           </Pressable>
 
+          <Pressable
+            style={styles.menuItem}
+            onPress={() => navigateTo("/media")}
+          >
+            <Text style={[styles.menuText, { color: colors.text }]}>
+              Meedia
+            </Text>
+          </Pressable>
+
           <View
             style={[styles.separator, { backgroundColor: colors.border }]}
           />
