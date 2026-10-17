@@ -1,27 +1,19 @@
-# Güroskoobi ja vibratsiooni demo
+# Güroskoobi mäng
 
-## Eesmärk
+Tegin rakendusse eraldi lehe, kus saab telefoni pööramisega sinist ringi liigutada. Kui ring jõuab sihtmärgini, saab mängija punkti ja telefon vibreerib. Sihtmärk liigub siis teise otsa.
 
-Rakenduse eraldi leht **Güroskoobi mäng** kasutab sisendina telefoni güroskoopi ja väljundina telefoni haptikat ehk vibratsiooni. Kasutaja pöörab telefoni nagu rooli, et liigutada sinine ring sihtmärki. Tabamus annab punkti, viib sihtmärgi teise otsa ja käivitab lühikese vibratsiooni.
+## Kuidas see töötab?
 
-## Teostus
+Rakendus loeb telefoni güroskoobilt kolme telje näite: X, Y ja Z. Need on lehel näha kraadides sekundis. Mängu juhib Z-telg, sest see muutub, kui keerata telefoni nagu rooli. Näitan ka kõigi kolme telje põhjal arvutatud pöörlemise tugevust.
 
-- Paigaldasin Expo SDK 57-ga sobivad paketid käsuga `npx expo install expo-sensors expo-haptics`.
-- `Gyroscope.isAvailableAsync()` kontrollib enne kuulamise alustamist, kas andur on olemas. Brauseris küsitakse andurile luba kasutaja nupuvajutuse järel.
-- `Gyroscope.addListener()` edastab X-, Y- ja Z-telje pöörlemiskiiruse radiaanides sekundis. Lehel teisendan näidud arusaadavamasse ühikusse °/s valemiga `rad/s × 180 / π`; mängu arvutused kasutavad endiselt algseid rad/s väärtusi. Z-telje näit on esile tõstetud, sest see juhib mängu.
-- Arvutan kolme telje põhjal pöörlemise tugevuse valemiga `sqrt(x² + y² + z²)`. Mäng kasutab Z-telge: näidu märk määrab liikumise suuna ja suurus kiiruse. Z-telje märk pööratakse mängu liikumises ümber, et vasakule keerates liiguks ring vasakule. Väike surnud tsoon vähendab paigalseisva telefoni värinat; mõõtmiste ajatemplid teevad liikumise sõltumatumaks sündmuste sagedusest.
-- Sihtmärgini jõudes käivitatakse tugev `Haptics.impactAsync(Heavy)` haptiline löök. Kasutaja saab vibratsiooni välja lülitada. Tabamuste vahele jääb vähemalt 700 ms, et üks liigutus ei annaks kiiresti mitu punkti. Tajutav tugevus sõltub seadme riistvarast ja seadetest.
-- Anduri tellimus eemaldatakse, kui mäng peatatakse või lehelt lahkutakse.
+Väikesed anduri kõikumised ei liiguta ringi. Sihtmärgi tabamisel annab telefon tugeva haptilise märguande; selle saab lehel välja lülitada. Mängu peatamisel või lehelt lahkudes lõpetab rakendus anduri kuulamise.
 
-## Mis oli lihtne ja mis keerulisem
+## Mis oli lihtne ja mis raske?
 
-Expo anduri ja haptika API-d on väikesed: anduri saadavuse kontroll, sündmuste kuulamine ja tagasiside käivitamine vajavad vähe koodi. Keerulisem oli teisendada pöörlemiskiirus mängus liikumiseks nii, et eri seadmete näidud ja sündmuste sagedus ei muudaks mängu liiga hüplikuks. Selleks kasutan ajatemplipõhist liikumist, surnud tsooni ja piiratud sammu. Samuti tuleb arvestada, et kõik seadmed ja brauserid ei paku güroskoopi ega vibratsiooni; leht annab anduri puudumisest teada.
+Expo abil oli anduri näitude lugemine ja vibratsiooni käivitamine üsna lihtne. Rohkem proovimist nõudis see, et ring liiguks telefoni pööramisega samas suunas ega hüppaks väikeste mõõtmiskõikumiste tõttu. Selleks muutsin liikumissuunda ja jätsin väga väikesed näidud arvestamata.
 
-## Kontrollimine
+## Kuidas proovida?
 
-Käivita rakendus füüsilisel telefonil, ava menüüst **Güroskoobi mäng** ja vajuta **Alusta**. Pööra telefoni ekraani tasapinnas kord ühele, kord teisele poole. Kontrolli, et X/Y/Z näidud muutuvad, ring liigub, sihtmärgi tabamisel punktisumma kasvab ning telefon annab haptilise tagasiside. Seejärel lülita vibratsioon välja ja kontrolli, et punktid tulevad ilma tagasisideta. Testi ka peatamist ja lehelt lahkumist. Simulaatoris ei pruugi andurit olla.
+Ava mäng päris telefonis, vajuta **Alusta** ja keera telefoni ekraani tasapinnas vasakule või paremale. Vaata, kas näidud ja ring liiguvad ning kas sihtmärgini jõudes tuleb punkt ja vibratsioon. Brauseris või simulaatoris ei pruugi güroskoop ega vibratsioon töötada.
 
-## Allikad
-
-- [Expo SDK 57 güroskoobi dokumentatsioon](https://docs.expo.dev/versions/v57.0.0/sdk/gyroscope/)
-- [Expo SDK 57 haptika dokumentatsioon](https://docs.expo.dev/versions/v57.0.0/sdk/haptics/)
+Kasutasin [Expo güroskoobi](https://docs.expo.dev/versions/v57.0.0/sdk/gyroscope/) ja [haptika](https://docs.expo.dev/versions/v57.0.0/sdk/haptics/) juhendeid.
