@@ -82,6 +82,15 @@ export default function SideMenu({ visible, onClose }: SideMenuProps) {
             </Text>
           </Pressable>
 
+          <Pressable
+            style={styles.menuItem}
+            onPress={() => navigateTo("/gyroscope")}
+          >
+            <Text style={[styles.menuText, { color: colors.text }]}>
+              Güroskoobi mäng
+            </Text>
+          </Pressable>
+
           <View
             style={[styles.separator, { backgroundColor: colors.border }]}
           />
