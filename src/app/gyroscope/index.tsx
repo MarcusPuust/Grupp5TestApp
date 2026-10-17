@@ -10,6 +10,7 @@ const BALL_SIZE = 30
 const TARGET_SIZE = 42
 const DEAD_ZONE = 0.08
 const SPEED = 170
+const DEGREES_PER_RADIAN = 180 / Math.PI
 
 export default function GyroscopeScreen() {
   const colors = useTheme()
@@ -115,7 +116,7 @@ export default function GyroscopeScreen() {
 
   const maxTravel = Math.max(0, trackWidth - BALL_SIZE)
   const targetLeft = targetRight ? Math.max(0, trackWidth - TARGET_SIZE - 8) : 8
-  const magnitude = Math.hypot(reading.x, reading.y, reading.z)
+  const magnitude = Math.hypot(reading.x, reading.y, reading.z) * DEGREES_PER_RADIAN
 
   return (
     <ScrollView style={{ backgroundColor: colors.background }} contentContainerStyle={styles.page}>
@@ -154,10 +155,10 @@ export default function GyroscopeScreen() {
 
       <View style={[styles.card, { backgroundColor: colors.card, borderColor: colors.border }]}>
         <Text style={[styles.sectionTitle, { color: colors.text }]}>Anduri näidud</Text>
-        <Text style={[styles.reading, { color: colors.text }]}>X: {reading.x.toFixed(2)} rad/s</Text>
-        <Text style={[styles.reading, { color: colors.text }]}>Y: {reading.y.toFixed(2)} rad/s</Text>
-        <Text style={[styles.reading, { color: colors.text }]}>Z: {reading.z.toFixed(2)} rad/s</Text>
-        <Text style={[styles.reading, { color: colors.textSecondary }]}>Pöörlemise tugevus: {magnitude.toFixed(2)} rad/s</Text>
+        <Text style={[styles.reading, { color: colors.text }]}>X: {(reading.x * DEGREES_PER_RADIAN).toFixed(1)} °/s</Text>
+        <Text style={[styles.reading, { color: colors.text }]}>Y: {(reading.y * DEGREES_PER_RADIAN).toFixed(1)} °/s</Text>
+        <Text style={[styles.reading, { color: colors.primary, fontWeight: "600" }]}>Z (juhib mängu): {(reading.z * DEGREES_PER_RADIAN).toFixed(1)} °/s</Text>
+        <Text style={[styles.reading, { color: colors.textSecondary }]}>Pöörlemise tugevus: {magnitude.toFixed(1)} °/s</Text>
         <Pressable style={styles.secondaryButton} onPress={() => setHapticsEnabled((value) => !value)}>
           <Text style={{ color: colors.primary }}>Vibratsioon: {hapticsEnabled ? "sees" : "väljas"}</Text>
         </Pressable>
