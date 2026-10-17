@@ -52,7 +52,7 @@ export default function GyroscopeScreen() {
       setScore((value) => value + 1)
       setMessage("Sihtmärk tabatud! Pööra nüüd teisele poole.")
       if (hapticsRef.current) {
-        void Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
+        void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
       }
     }
   }, [])
