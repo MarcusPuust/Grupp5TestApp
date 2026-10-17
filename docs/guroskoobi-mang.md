@@ -9,7 +9,7 @@ Rakenduse eraldi leht **Güroskoobi mäng** kasutab sisendina telefoni güroskoo
 - Paigaldasin Expo SDK 57-ga sobivad paketid käsuga `npx expo install expo-sensors expo-haptics`.
 - `Gyroscope.isAvailableAsync()` kontrollib enne kuulamise alustamist, kas andur on olemas. Brauseris küsitakse andurile luba kasutaja nupuvajutuse järel.
 - `Gyroscope.addListener()` edastab X-, Y- ja Z-telje pöörlemiskiiruse radiaanides sekundis. Näidud kuvatakse lehel.
-- Arvutan kolme telje põhjal pöörlemise tugevuse valemiga `sqrt(x² + y² + z²)`. Mäng kasutab Z-telge: näidu märk määrab liikumise suuna ja suurus kiiruse. Väike surnud tsoon vähendab paigalseisva telefoni värinat; mõõtmiste ajatemplid teevad liikumise sõltumatumaks sündmuste sagedusest.
+- Arvutan kolme telje põhjal pöörlemise tugevuse valemiga `sqrt(x² + y² + z²)`. Mäng kasutab Z-telge: näidu märk määrab liikumise suuna ja suurus kiiruse. Z-telje märk pööratakse mängu liikumises ümber, et vasakule keerates liiguks ring vasakule. Väike surnud tsoon vähendab paigalseisva telefoni värinat; mõõtmiste ajatemplid teevad liikumise sõltumatumaks sündmuste sagedusest.
 - Sihtmärgini jõudes käivitatakse tugev `Haptics.impactAsync(Heavy)` haptiline löök. Kasutaja saab vibratsiooni välja lülitada. Tabamuste vahele jääb vähemalt 700 ms, et üks liigutus ei annaks kiiresti mitu punkti. Tajutav tugevus sõltub seadme riistvarast ja seadetest.
 - Anduri tellimus eemaldatakse, kui mäng peatatakse või lehelt lahkutakse.
 

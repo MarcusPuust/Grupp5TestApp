@@ -39,7 +39,7 @@ export default function GyroscopeScreen() {
 
     const seconds = Math.min(Math.max(data.timestamp - previous, 0), 0.1)
     const rotation = Math.abs(data.z) < DEAD_ZONE ? 0 : data.z
-    const next = Math.max(0, Math.min(1, positionRef.current + rotation * seconds * SPEED / 300))
+    const next = Math.max(0, Math.min(1, positionRef.current - rotation * seconds * SPEED / 300))
     positionRef.current = next
     setPosition(next)
 
