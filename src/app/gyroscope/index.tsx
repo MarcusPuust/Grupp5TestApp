@@ -8,6 +8,7 @@ import { useTheme } from "@/hooks/use-theme"
 
 const BALL_SIZE = 30
 const TARGET_SIZE = 42
+// Väikesed mõõtmiskõikumised ei tohiks paigal hoitud telefoni korral ringi liigutada.
 const DEAD_ZONE = 0.08
 const SPEED = 170
 const DEGREES_PER_RADIAN = 180 / Math.PI
@@ -22,6 +23,7 @@ export default function GyroscopeScreen() {
   const [targetRight, setTargetRight] = useState(true)
   const [score, setScore] = useState(0)
   const [hapticsEnabled, setHapticsEnabled] = useState(true)
+  // Viited hoiavad anduri kuulajas värskeid väärtusi ilma kuulajat igal renderdusel uuesti loomata.
   const positionRef = useRef(0.5)
   const targetRightRef = useRef(true)
   const lastTimestampRef = useRef<number | null>(null)
@@ -33,17 +35,21 @@ export default function GyroscopeScreen() {
   }, [hapticsEnabled])
 
   const onReading = useCallback((data: GyroscopeMeasurement) => {
+    // Kõik kolm telge kuvatakse ekraanil, kuid mängu juhib ainult Z-telg.
     setReading({ x: data.x, y: data.y, z: data.z })
     const previous = lastTimestampRef.current
     lastTimestampRef.current = data.timestamp
     if (previous === null) return
 
+    // Ajatemplite vahe hoiab liikumise sujuvana ka siis, kui mõõtmised ei saabu täpselt iga 50 ms järel.
     const seconds = Math.min(Math.max(data.timestamp - previous, 0), 0.1)
     const rotation = Math.abs(data.z) < DEAD_ZONE ? 0 : data.z
+    // Miinusmärk seab ringi liikumise telefoni keeramisega samasse suunda; asukoht püsib vahemikus 0...1.
     const next = Math.max(0, Math.min(1, positionRef.current - rotation * seconds * SPEED / 300))
     positionRef.current = next
     setPosition(next)
 
+    // Sihtmärgi tabamisel vahetame poolt. 700 ms paus väldib ühe liigutusega mitut punkti.
     const reached = targetRightRef.current ? next >= 0.9 : next <= 0.1
     const now = Date.now()
     if (reached && now - lastHitRef.current > 700) {
@@ -58,6 +64,7 @@ export default function GyroscopeScreen() {
     }
   }, [])
 
+  // Andurit kuulatakse ainult siis, kui mäng töötab ja see leht on nähtaval.
   useFocusEffect(useCallback(() => {
     if (!running) return
     let cancelled = false
@@ -86,6 +93,7 @@ export default function GyroscopeScreen() {
 
     void subscribe()
     return () => {
+      // Peatamisel või lehelt lahkudes lõpetame mõõtmise kuulamise.
       cancelled = true
       subscription?.remove()
       lastTimestampRef.current = null
@@ -99,6 +107,7 @@ export default function GyroscopeScreen() {
       return
     }
     if (Platform.OS === "web") {
+      // Mobiilibrauser võib nõuda andurile luba just kasutaja nupuvajutuse ajal.
       try {
         const permission = await Gyroscope.requestPermissionsAsync()
         if (!permission.granted) {
@@ -116,6 +125,7 @@ export default function GyroscopeScreen() {
 
   const maxTravel = Math.max(0, trackWidth - BALL_SIZE)
   const targetLeft = targetRight ? Math.max(0, trackWidth - TARGET_SIZE - 8) : 8
+  // Ekraanil näitame pöörlemiskiirust kraadides sekundis; mängu arvutus kasutab algseid rad/s näite.
   const magnitude = Math.hypot(reading.x, reading.y, reading.z) * DEGREES_PER_RADIAN
 
   return (
