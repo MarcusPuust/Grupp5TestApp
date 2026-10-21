@@ -170,3 +170,23 @@ Kõige keerulisem oli Simulatori ja Metro Bundleri ühenduse seadistamine. Probl
 Töö käigus saime praktilise kogemuse Expo, React Native'i, iOS Simulatori, füüsilise iPhone'i ja debuggeriga. Samuti nägime, et rakenduse töötamist tuleb kontrollida eraldi nii virtuaalses kui ka füüsilises seadmes.
 
 ---
+
+# AR-leht – kodutöö S06
+
+Uus leht **☰ → Liitreaalsus (AR)** paigutab 3D-mudeli **Tung Tung Tung Sahur** ([Eks.Art, Sketchfab, CC BY 4.0](https://sketchfab.com/3d-models/tung-tung-tung-sahur-91ddd9079bd84019ba4a12e01d93a0d6)) päris pinnale. Nupp avab mudeli süsteemi AR-vaaturis: iOS-is **AR Quick Look** (ARKit, `.usdz`), Androidis **Scene Viewer** (ARCore, `.glb`). Pinna tuvastuse ja žestid teeb vaatur ise, seega native-koodi pole vaja ja kõik töötab Expo Go's.
+
+**Muudatused (94 rida, ~2,9% koodist):** `src/app/ar/index.tsx` (uus leht), `src/components/side-menu.tsx` (menüüpunkt), `assets/models/` (mudelid).
+
+**Käivitamine iPhone'is:** `npx expo start --tunnel` → skaneeri QR-kood → Expo Go → AR-leht → **Ava AR-is**. Simulaatoris AR-i testida ei saa, sest seal puudub kaamera.
+
+**Kontrollimine:** `tsc`, `expo lint`, `expo export --platform ios` ja `curl`-iga mudelifailide MIME-tüübid; AR-i ennast testisime füüsilises iPhone'is.
+
+**Keeruline oli:**
+- Native AR-teegid vajavad development buildi, mis iPhone'i jaoks nõuab tasulist Apple'i kontot, seega valisime süsteemi AR-vaaturi.
+- AR Quick Look vajab MIME-tüüpi `model/vnd.usdz+zip`, mida GitHubi raw-lingid ei saada. Mudeleid jagame **jsDelivr** CDN-i kaudu.
+- Windowsis jäi Expo Go laadima, sest tulemüür blokeeris Node.js-i Public-võrgus. Aitas `--tunnel`.
+- `--tunnel` ei leidnud globaalselt paigaldatud `@expo/ngrok`-i. Aitas `npm install --no-save @expo/ngrok@^4.1.0`.
+
+**Lihtne oli** lehe enda tegemine: Expo Routeris piisas ühest uuest failist ja AR-i osa koodis on vaid paar rida.
+
+---
