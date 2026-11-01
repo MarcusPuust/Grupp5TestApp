@@ -8,14 +8,7 @@
     "scheme": "grupp5testapp",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/expo.icon",
-      "infoPlist": {
-        "NSPhotoLibraryUsageDescription": "Allow $(PRODUCT_NAME) to access your photos",
-        "NSPhotoLibraryAddUsageDescription": "Allow $(PRODUCT_NAME) to save photos",
-        "NSCameraUsageDescription": "Kaamerat kasutatakse pindade tuvastamiseks ja AR-kauguse mõõtmiseks.",
-        "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to use your microphone"
-      },
-      "bundleIdentifier": "com.croccu.Grupp5TestApp"
+      "icon": "./assets/expo.icon"
     },
     "android": {
       "adaptiveIcon": {
@@ -24,13 +17,7 @@
         "backgroundImage": "./assets/images/android-icon-background.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false,
-      "permissions": [
-        "android.permission.RECORD_AUDIO",
-        "android.permission.MODIFY_AUDIO_SETTINGS",
-        "android.permission.FOREGROUND_SERVICE",
-        "android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK"
-      ]
+      "predictiveBackGestureEnabled": false
     },
     "web": {
       "output": "static",
@@ -47,21 +34,7 @@
         }
       ],
       "expo-audio",
-      "expo-video",
-      [
-        "@reactvision/react-viro",
-        {
-          "provider": "none",
-          "android": {
-            "xRMode": [
-              "AR"
-            ]
-          },
-          "ios": {
-            "cameraUsagePermission": "Kaamerat kasutatakse pindade tuvastamiseks ja AR-kauguse mõõtmiseks."
-          }
-        }
-      ]
+      "expo-video"
     ],
     "experiments": {
       "typedRoutes": true,
