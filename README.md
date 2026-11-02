@@ -190,3 +190,33 @@ Uus leht **☰ → Liitreaalsus (AR)** paigutab 3D-mudeli **Tung Tung Tung Sahur
 **Lihtne oli** lehe enda tegemine: Expo Routeris piisas ühest uuest failist ja AR-i osa koodis on vaid paar rida.
 
 ---
+
+## AR-mõõtmine – ebaõnnestunud katse - kodutöö S06
+
+Proovisime AR-lehele lisada **kahe punkti vahelise kauguse mõõtmise** (nagu lihtsustatud mõõdulint liitreaalsuses). Idee oli panna kaamera peale kaks punkti päris pinnal ning arvutada nende 3D-koordinaatide vaheline distants meetrites.
+
+### Mida proovisime
+
+- Teek **`@reactvision/react-viro`** (Viro React) koos plane detection / hit-testiga
+- Eraldi mõõtmise vaade ja sessioon (`measure`, `measurement-session` jms)
+- **`expo-dev-client`** ja development build, sest Viro on native-moodul
+- iOS/Androidi loadades kaamera- ja AR-õigused (`app.json`)
+
+See jõudis ajutiselt `main`i (PR #6, haru `ar-measuring`), kuid **tühistati hiljem revertiga**, et projekt jälle **Expo Go**-ga töötaks.
+
+### Miks see meie piirangutega päris ei sobi
+
+1. **Expo Go ei sisalda Virot ega teisi native AR-mooduleid.** Pärast teegi lisamist rakendus Expo Go’s enam korralikult ei käivitu / ei lae AR-sessiooni. Vaja on custom development buildi (`npx expo run:ios|android` või EAS build).
+2. **Viro ei tööta Expo SDK 58-ga üldse.** Isegi development buildiga ei ole `@reactvision/react-viro` praegu SDK 58 peal kasutatav (ühilduvus puudub / build puruneb). Projekt on `main`is SDK 58 peal Expo Go toe pärast, seega Viro-põhine mõõtmine ei ole selle stackiga realistlik tee.
+3. **Süsteemi AR-vaaturid (AR Quick Look / Scene Viewer) ei paku mõõtmis-API-t.** Need sobivad mudeli pinnal kuvamiseks, aga meie kood ei saa sealt elavat hit-testi, plane’e ega meetrites kaugust tagasi küsida. Seega „Ava AR-is“ mudeli voog **ei asenda** päris mõõtmist.
+4. **Päris mõõtmine vajab seadmesisesest AR-sessiooni** (ARKit / ARCore): kaamera, pinna tuvastus, world tracking ja punktide 3D-positsioonid. See on native-kiht, mitte puhas JS Expo Go’s.
+5. **iPhone’i development build füüsilisele seadmele** eeldab tavaliselt tasulist Apple Developer kontot (sertifikaadid / provisioning). Kursuse Expo Go töövoo juures see on liiga suur takistus.
+6. **Simulaatoris AR-i ei testi** — puudub päris kaamera ja depth/world tracking; mõõtmist saab usaldusväärselt proovida ainult sobiva riistvaraga telefonis.
+
+### Järeldus
+
+AR-mudeli kuvamine Expo Go’s **on tehtav** süsteemi vaaturitega (praegune AR-leht). **Meetrites kauguse mõõtmine rakenduse sees** ei ole samas Expo Go + ilma native buildita realistlik: selleks oleks vaja development/production buildi, native AR-teeki ja seadmetesti. Seetõttu jätsime mõõtmiskatse kõrvale ja hoidsime `main`i Expo Go ühilduvana.
+
+Haru `origin/ar-measuring` jääb ajalukku viiteks; `main`is seda koodi enam pole.
+
+---
