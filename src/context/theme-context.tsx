@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage"
 import React, { createContext, useContext, useEffect, useState } from "react"
 import { useColorScheme as useRNColorScheme } from "react-native"
 
@@ -23,22 +24,22 @@ export function AppThemeProvider({ children }: { children: React.ReactNode }) {
     useState<ThemePreference>("system")
   const systemScheme = useRNColorScheme()
 
+  // Loeme salvestatud teema valiku (töötab nii telefonis kui veebis)
   useEffect(() => {
-    if (typeof window !== "undefined" && window.localStorage) {
-      const saved = window.localStorage.getItem(
-        STORAGE_KEY
-      ) as ThemePreference | null
-      if (saved === "system" || saved === "light" || saved === "dark") {
-        setThemePreferenceState(saved)
-      }
-    }
+    AsyncStorage.getItem(STORAGE_KEY)
+      .then((saved) => {
+        if (saved === "system" || saved === "light" || saved === "dark") {
+          setThemePreferenceState(saved)
+        }
+      })
+      .catch((error) => console.error("Teema lugemine ebaõnnestus:", error))
   }, [])
 
   const setThemePreference = (preference: ThemePreference) => {
     setThemePreferenceState(preference)
-    if (typeof window !== "undefined" && window.localStorage) {
-      window.localStorage.setItem(STORAGE_KEY, preference)
-    }
+    AsyncStorage.setItem(STORAGE_KEY, preference).catch((error) =>
+      console.error("Teema salvestamine ebaõnnestus:", error)
+    )
   }
 
   const resolvedScheme: ColorScheme =
