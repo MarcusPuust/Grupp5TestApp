@@ -1,27 +1,31 @@
 import { useTheme } from "@/hooks/use-theme"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import {
-    Alert,
-    Image,
-    Modal,
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
+  Alert,
+  Image,
+  Modal,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from "react-native"
 
 import {
-    AudioModule,
-    RecordingPresets,
-    setAudioModeAsync,
-    useAudioPlayer,
-    useAudioRecorder,
-    useAudioRecorderState,
+  AudioModule,
+  RecordingPresets,
+  setAudioModeAsync,
+  useAudioPlayer,
+  useAudioRecorder,
+  useAudioRecorderState,
 } from "expo-audio"
 
 import * as ImagePicker from "expo-image-picker"
 import { useVideoPlayer, VideoView } from "expo-video"
+
+import { File, Paths } from "expo-file-system"
+
+const savedPhoto = new File(Paths.document, "salvestatud_foto.jpg")
 
 // Salvestatud heli kuulamine
 function AudioPlayback({ uri }: { uri: string }) {
@@ -78,6 +82,21 @@ export default function MediaScreen() {
   // Foto või video olek
   const [mediaAsset, setMediaAsset] =
     useState<ImagePicker.ImagePickerAsset | null>(null)
+
+  useEffect(() => {
+    try {
+      if (savedPhoto.exists) {
+        setMediaAsset({
+          uri: `${savedPhoto.uri}?time=${Date.now()}`, // ?time väldib vahemälu tõrkeid
+          type: "image",
+          width: 0,
+          height: 0,
+        } as ImagePicker.ImagePickerAsset)
+      }
+    } catch (error) {
+      console.error("Viga faili kontrollimisel:", error)
+    }
+  }, [])
 
   // Alustame heli salvestamist
   const startRecording = async () => {
@@ -137,7 +156,6 @@ export default function MediaScreen() {
     setCameraBusy(true)
 
     try {
-      // Küsime kaamera kasutamise luba
       const permission = await ImagePicker.requestCameraPermissionsAsync()
 
       if (!permission.granted) {
@@ -148,7 +166,6 @@ export default function MediaScreen() {
         return
       }
 
-      // Avame kaamera foto või video tegemiseks
       const result = await ImagePicker.launchCameraAsync({
         mediaTypes: ["images", "videos"],
         allowsEditing: false,
@@ -156,9 +173,39 @@ export default function MediaScreen() {
         videoMaxDuration: 30,
       })
 
-      // Salvestame tulemuse, kui kasutaja kinnitas selle
       if (!result.canceled && result.assets.length > 0) {
-        setMediaAsset(result.assets[0])
+        const asset = result.assets[0]
+
+        // Kui tehti foto, kopeerime selle püsivalt seadme mällu
+        if (asset.type === "image") {
+          try {
+            const tempFile = new File(asset.uri)
+
+            if (savedPhoto.exists) {
+              savedPhoto.delete()
+            }
+
+            // Kopeerime pildi püsivasse kausta
+            tempFile.copy(savedPhoto)
+
+            // Uuendame eelvaate
+            setMediaAsset({
+              ...asset,
+              uri: `${savedPhoto.uri}?time=${Date.now()}`,
+            })
+
+            Alert.alert(
+              "Salvestatud!",
+              "Foto salvestati seadme lokaalsesse mällu."
+            )
+          } catch (error) {
+            console.error("Salvestamise viga:", error)
+            Alert.alert("Viga", "Foto salvestamine ebaõnnestus.")
+          }
+        } else {
+          // Kui tehti video
+          setMediaAsset(asset)
+        }
       }
     } catch {
       Alert.alert(

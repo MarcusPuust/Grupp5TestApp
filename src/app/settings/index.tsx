@@ -1,19 +1,58 @@
 import {
+  Alert,
   Pressable,
   ScrollView,
   StyleSheet,
   Switch,
   Text,
+  TextInput,
   View,
 } from "react-native"
 
+import AsyncStorage from "@react-native-async-storage/async-storage"
+
 import { useThemeContext, type ThemePreference } from "@/context/theme-context"
 import { useTheme } from "@/hooks/use-theme"
+import { useEffect, useState } from "react"
+
+const storage_keys = {
+  NAME: "@user_profile_name",
+  EMAIL: "@user_profile_email",
+}
 
 export default function SettingsScreen() {
   const { themePreference, setThemePreference, colorScheme, isDark } =
     useThemeContext()
   const colors = useTheme()
+
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [isSaved, setIsSaved] = useState(false)
+
+  useEffect(() => {
+    const loadProfileData = async () => {
+      try {
+        const storedName = await AsyncStorage.getItem(storage_keys.NAME)
+        const storedEmail = await AsyncStorage.getItem(storage_keys.EMAIL)
+        if (storedName !== null) setName(storedName)
+        if (storedEmail !== null) setEmail(storedEmail)
+      } catch (e) {
+        console.error(e)
+      }
+    }
+    loadProfileData()
+  }, [])
+
+  const handleSaveProfile = async () => {
+    try {
+      await AsyncStorage.setItem(storage_keys.NAME, name)
+      await AsyncStorage.setItem(storage_keys.EMAIL, email)
+      setIsSaved(true)
+      Alert.alert("Salvestatud", "Kasutaja andmed salvestati seadme mällu!")
+    } catch (e) {
+      Alert.alert("Viga", "Andmete salvestamine ebaõnnestus.")
+    }
+  }
 
   const options: {
     id: ThemePreference
@@ -153,6 +192,80 @@ export default function SettingsScreen() {
             thumbColor="#FFFFFF"
           />
         </View>
+      </View>
+
+      <View
+        style={[
+          styles.card,
+          {
+            backgroundColor: colors.card,
+            borderColor: colors.border,
+          },
+        ]}
+      >
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>
+          Kasutaja profiil
+        </Text>
+        <Text style={[styles.sectionSubtitle, { color: colors.textSecondary }]}>
+          Andmed salvestatakse lokaalselt seadme mällu.
+        </Text>
+
+        {/* Nime sisestus */}
+        <View>
+          <Text style={[styles.inputLabel, { color: colors.textSecondary }]}>
+            Nimi
+          </Text>
+          <TextInput
+            value={name}
+            onChangeText={(txt) => {
+              setName(txt)
+              setIsSaved(false)
+            }}
+            placeholderTextColor={colors.textSecondary}
+            style={[
+              styles.input,
+              {
+                backgroundColor: colors.cardSubtle,
+                borderColor: colors.border,
+                color: colors.text,
+              },
+            ]}
+          />
+        </View>
+
+        {/* E-posti sisestus */}
+        <View>
+          <Text style={[styles.inputLabel, { color: colors.textSecondary }]}>
+            E-post
+          </Text>
+          <TextInput
+            value={email}
+            onChangeText={(txt) => {
+              setEmail(txt)
+              setIsSaved(false)
+            }}
+            placeholderTextColor={colors.textSecondary}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            style={[
+              styles.input,
+              {
+                backgroundColor: colors.cardSubtle,
+                borderColor: colors.border,
+                color: colors.text,
+              },
+            ]}
+          />
+        </View>
+
+        {/* Salvestamise nupp */}
+        <Pressable
+          onPress={handleSaveProfile}
+          style={[styles.saveButton, { backgroundColor: colors.primary }]}
+          accessibilityRole="button"
+        >
+          <Text style={styles.saveButtonText}>Salvesta muudatused</Text>
+        </Pressable>
       </View>
 
       {/* Rakenduse teave */}
@@ -323,6 +436,33 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   infoValue: {
+    fontSize: 15,
+    fontWeight: "600",
+  },
+  inputGroup: {
+    marginBottom: 14,
+  },
+  inputLabel: {
+    fontSize: 13,
+    fontWeight: "500",
+    marginBottom: 6,
+  },
+  input: {
+    height: 48,
+    borderRadius: 10,
+    borderWidth: 1,
+    paddingHorizontal: 14,
+    fontSize: 15,
+  },
+  saveButton: {
+    height: 46,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 8,
+  },
+  saveButtonText: {
+    color: "#FFFFFF",
     fontSize: 15,
     fontWeight: "600",
   },
