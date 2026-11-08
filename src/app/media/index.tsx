@@ -4,6 +4,7 @@ import {
   Alert,
   Image,
   Modal,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -25,7 +26,8 @@ import { useVideoPlayer, VideoView } from "expo-video"
 
 import { File, Paths } from "expo-file-system"
 
-const savedPhoto = new File(Paths.document, "salvestatud_foto.jpg")
+// Luuakse alles kasutamisel: veebi serveripoolsel renderdamisel failisüsteemi pole
+const getSavedPhoto = () => new File(Paths.document, "salvestatud_foto.jpg")
 
 // Salvestatud heli kuulamine
 function AudioPlayback({ uri }: { uri: string }) {
@@ -84,7 +86,10 @@ export default function MediaScreen() {
     useState<ImagePicker.ImagePickerAsset | null>(null)
 
   useEffect(() => {
+    if (Platform.OS === "web") return
+
     try {
+      const savedPhoto = getSavedPhoto()
       if (savedPhoto.exists) {
         setMediaAsset({
           uri: `${savedPhoto.uri}?time=${Date.now()}`, // ?time väldib vahemälu tõrkeid
@@ -180,6 +185,7 @@ export default function MediaScreen() {
         if (asset.type === "image") {
           try {
             const tempFile = new File(asset.uri)
+            const savedPhoto = getSavedPhoto()
 
             if (savedPhoto.exists) {
               savedPhoto.delete()
