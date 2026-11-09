@@ -225,6 +225,13 @@ export default function MediaScreen() {
 
   // Eemaldame kuvatava foto või video
   const clearMedia = () => {
+    /*     try {
+      if (savedPhoto.exists) {
+        savedPhoto.delete()
+      }
+    } catch (e) {
+      console.error("Kustutamise viga:", e)
+    } */
     setMediaAsset(null)
   }
 
