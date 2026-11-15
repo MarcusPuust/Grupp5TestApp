@@ -42,7 +42,8 @@ export default function NetworkScreen() {
     setProducts([])
 
     try {
-      const response = await fetch(`${API_URL}/products?limit=3`)
+      const skip = Math.floor(Math.random() * 191)
+      const response = await fetch(`${API_URL}/products?limit=3&skip=${skip}`)
 
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}`)
